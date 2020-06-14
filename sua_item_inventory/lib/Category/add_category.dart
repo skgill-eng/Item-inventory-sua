@@ -1,23 +1,44 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:inventory/Category/category.dart';
+import 'package:inventory/Types/category_type.dart';
+import 'package:inventory/Utils/database_helper.dart';
 
 
 class AddCategory extends StatefulWidget {
+    final String appBarTitle;
+    final CategoryType category;
+    AddCategory(this.category, this.appBarTitle);
   @override
   State<StatefulWidget> createState() {
-    return AddCategoryState();
+    return AddCategoryState(this.category, this.appBarTitle);
   }
 }
 
 class AddCategoryState extends State<AddCategory> {
 
+  DatabaseHelper helper = DatabaseHelper();
+
+  String appBarTitle;
+  CategoryType category;
+
+  TextEditingController categoryNameController = TextEditingController();
+
+
+  AddCategoryState(this.category, this.appBarTitle);
+
   @override
   Widget build(BuildContext context) {
 
     final categoryName = TextFormField(
+      controller: categoryNameController,
       keyboardType: TextInputType.text,
       autofocus: false,
+      onChanged: (value){
+        debugPrint('Something changed in Title Text Field');
+        category.category_name = categoryNameController.text;
+      },
       //initialValue: 'udaisingh@gmail.com',
       decoration: InputDecoration(
         hintText: 'Enter Category Name',
@@ -33,7 +54,10 @@ class AddCategoryState extends State<AddCategory> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          Navigator.pop(context);
+          setState(() {
+            debugPrint("Save button clicked");
+           _save();
+          });
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
@@ -41,9 +65,11 @@ class AddCategoryState extends State<AddCategory> {
       ),
     );
 
+    categoryNameController.text = category.category_name;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Category Name'),
+        title: Text(appBarTitle),
 
       ),
       body: Center(
@@ -59,6 +85,40 @@ class AddCategoryState extends State<AddCategory> {
           ],
         ),
       ),
+    );
+  }
+
+  void _save() async {
+
+    Navigator.pop(context);
+    category.created_by = "Udai";
+    category.updated_by = "Udai";
+    category.create_date =  DateFormat.yMMMd().format(DateTime.now());
+    category.update_date =  DateFormat.yMMMd().format(DateTime.now());
+    int result;
+    if (category.category_id != null) {  // Case 1: Update operation
+      result = await helper.updateCategory(category);
+    } else { // Case 2: Insert Operation
+      result = await helper.insertCategory(category);
+    }
+
+    if (result != 0) {  // Success
+      _showAlertDialog('Status', 'Category Saved Successfully');
+    } else {  // Failure
+      _showAlertDialog('Status', 'Problem Saving Category');
+    }
+
+  }
+
+  void _showAlertDialog(String title, String message) {
+
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+    );
+    showDialog(
+        context: context,
+        builder: (_) => alertDialog
     );
   }
 }
