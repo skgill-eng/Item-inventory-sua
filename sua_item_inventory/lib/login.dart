@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:inventory/category.dart';
+
 
 class Login extends StatefulWidget {
   @override
@@ -51,7 +53,11 @@ class LoginState extends State<Login> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-         // Navigator.of(context).pushNamed(HomePage.tag);
+
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+            return Category();
+          }));
+
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
