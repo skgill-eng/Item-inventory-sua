@@ -20,7 +20,7 @@ class AddCategoryState extends State<AddCategory> {
       autofocus: false,
       //initialValue: 'udaisingh@gmail.com',
       decoration: InputDecoration(
-        hintText: 'Category Name',
+        hintText: 'Enter Category Name',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
@@ -43,7 +43,7 @@ class AddCategoryState extends State<AddCategory> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('Add Category')),
+        title: Text('Add Category Name'),
 
       ),
       body: Center(
