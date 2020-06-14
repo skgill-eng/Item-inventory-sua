@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inventory/login.dart';
+import 'package:inventory/Login/login.dart';
 
 void main() {
   runApp(SUAInventory());
