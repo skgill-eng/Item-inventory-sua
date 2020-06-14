@@ -15,9 +15,11 @@ class CategoryState extends State<Category> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Category Name',
-          textAlign: TextAlign.center,
+        title: Center(
+          child: Text(
+            'Category Name',
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
       floatingActionButton:FloatingActionButton(
