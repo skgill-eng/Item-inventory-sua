@@ -23,7 +23,7 @@ class CategoryState extends State<Category> {
   Widget build(BuildContext context) {
     if (categoryList == null) {
       categoryList = List<CategoryType>();
-     // updateListView();
+      updateListView();
     }
 
     return Scaffold(

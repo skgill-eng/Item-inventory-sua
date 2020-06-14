@@ -90,7 +90,7 @@ class AddCategoryState extends State<AddCategory> {
 
   void _save() async {
 
-    Navigator.pop(context);
+    Navigator.pop(context, true);
     category.created_by = "Udai";
     category.updated_by = "Udai";
     category.create_date =  DateFormat.yMMMd().format(DateTime.now());
@@ -98,14 +98,18 @@ class AddCategoryState extends State<AddCategory> {
     int result;
     if (category.category_id != null) {  // Case 1: Update operation
       result = await helper.updateCategory(category);
-    } else { // Case 2: Insert Operation
+      print("Update category"+category.category_id.toString());
+    } else {// Case 2: Insert Operation
       result = await helper.insertCategory(category);
+      print("Insert category"+category.category_id.toString());
     }
 
-    if (result != 0) {  // Success
-      _showAlertDialog('Status', 'Category Saved Successfully');
-    } else {  // Failure
-      _showAlertDialog('Status', 'Problem Saving Category');
+    if (result != 0) {
+      print("Success");// Success
+      //_showAlertDialog('Status', 'Category Saved Successfully');
+    } else {
+      print("Failue");// Failure
+      //_showAlertDialog('Status', 'Problem Saving Category');
     }
 
   }
