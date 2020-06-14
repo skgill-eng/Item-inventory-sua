@@ -1,24 +1,47 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:inventory/Category/category.dart';
+import 'package:inventory/Types/product._type.dart';
+import 'package:inventory/Utils/database_helper.dart';
 
 
 class AddProduct extends StatefulWidget {
+  final String appBarTitle;
+  final ProductType product;
+  AddProduct(this.product, this.appBarTitle);
   @override
   State<StatefulWidget> createState() {
-    return AddProductState();
+    return AddProductState(this.product, this.appBarTitle);
   }
 }
 
 class AddProductState extends State<AddProduct> {
 
+  DatabaseHelper helper = DatabaseHelper();
+
+  String appBarTitle;
+  ProductType product;
+
+  TextEditingController productNameController = TextEditingController();
+  TextEditingController productCostPriceController = TextEditingController();
+  TextEditingController productSellingPriceController = TextEditingController();
+
+
+  AddProductState(this.product, this.appBarTitle);
+
   @override
   Widget build(BuildContext context) {
 
     final productName = TextFormField(
+      controller: productNameController,
       keyboardType: TextInputType.text,
       autofocus: false,
       //initialValue: 'udaisingh@gmail.com',
+      onChanged: (value){
+        debugPrint('Something changed in Title Text Field');
+        product.product_name = productNameController.text;
+      },
       decoration: InputDecoration(
         hintText: 'Enter Product Name',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -27,9 +50,14 @@ class AddProductState extends State<AddProduct> {
     );
 
     final productCostPrice = TextFormField(
+      controller: productCostPriceController,
       keyboardType: TextInputType.numberWithOptions(decimal: true),
       autofocus: false,
       //initialValue: 'udaisingh@gmail.com',
+      onChanged: (value){
+        debugPrint('Something changed in Title Text Field');
+        product.product_cost_price = productCostPriceController.text;
+      },
       decoration: InputDecoration(
         hintText: 'Enter Product Cost Price',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -38,9 +66,14 @@ class AddProductState extends State<AddProduct> {
     );
 
     final productSellingPrice = TextFormField(
+      controller: productSellingPriceController,
       keyboardType: TextInputType.numberWithOptions(decimal: true),
       autofocus: false,
       //initialValue: 'udaisingh@gmail.com',
+      onChanged: (value){
+        debugPrint('Something changed in Title Text Field');
+        product.product_sell_price = productSellingPriceController.text;
+      },
       decoration: InputDecoration(
         hintText: 'Enter Product Selling Price',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -55,7 +88,7 @@ class AddProductState extends State<AddProduct> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          Navigator.pop(context);
+          _save();
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
@@ -63,9 +96,13 @@ class AddProductState extends State<AddProduct> {
       ),
     );
 
+    productNameController.text = product.product_name;
+    productCostPriceController.text = product.product_cost_price;
+    productSellingPriceController.text = product.product_sell_price;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Product'),
+        title: Text(appBarTitle),
 
       ),
       body: Center(
@@ -85,6 +122,32 @@ class AddProductState extends State<AddProduct> {
         ),
       ),
     );
+  }
+
+  void _save() async {
+
+    Navigator.pop(context, true);
+    product.created_by = "Udai";
+    product.updated_by = "Udai";
+    product.create_date =  DateFormat.yMMMd().format(DateTime.now());
+    product.update_date =  DateFormat.yMMMd().format(DateTime.now());
+    int result;
+    if (product.product_id != null) {  // Case 1: Update operation
+      result = await helper.updateProduct(product);
+      print("Update category"+product.product_id.toString());
+    } else {// Case 2: Insert Operation
+      result = await helper.insertProduct(product);
+      print("Insert category"+product.product_id.toString());
+    }
+
+    if (result != 0) {
+      print("Success");// Success
+      //_showAlertDialog('Status', 'Category Saved Successfully');
+    } else {
+      print("Failue");// Failure
+      //_showAlertDialog('Status', 'Problem Saving Category');
+    }
+
   }
 }
 

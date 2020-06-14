@@ -18,6 +18,7 @@ class CategoryState extends State<Category> {
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<CategoryType> categoryList;
   int count = 0;
+  int categoryId;
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +76,12 @@ class CategoryState extends State<Category> {
                 ],
               ),
               onTap: () {
+                setState(() {
+                  categoryId = this.categoryList[position].category_id;
+                });
                 debugPrint("ListTile Tapped");
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return Product();
+                  return Product(categoryId);
                 }));
                 //navigateToDetail(this.todoList[position], 'Edit Todo');
               },
