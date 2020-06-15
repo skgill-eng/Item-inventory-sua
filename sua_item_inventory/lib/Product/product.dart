@@ -8,8 +8,9 @@ import 'package:sqflite/sqflite.dart';
 
 class Product extends StatefulWidget {
   final categoryId;
+  final categoryName;
 
-  Product(this.categoryId);
+  Product(this.categoryId,this.categoryName);
 
   @override
   State<StatefulWidget> createState() {
@@ -29,10 +30,14 @@ class ProductState extends State<Product> {
       updateListView();
     }
 
+    String appBarTitleText=widget.categoryName.toString()+' Products';
+
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Product Lists',
+          appBarTitleText,
           textAlign: TextAlign.left,
         ),
       ),
@@ -89,8 +94,10 @@ class ProductState extends State<Product> {
                             color: Colors.blue,
                           ),
                           onTap: () {
+                            String updateAppBarTitleText;
+                            updateAppBarTitleText ='Update '+this.productList[position].product_name+' Product Details';
                             navigateToDetail(
-                                this.productList[position], 'Edit Product');
+                                this.productList[position], updateAppBarTitleText);
                           },
                         ),
                       ),

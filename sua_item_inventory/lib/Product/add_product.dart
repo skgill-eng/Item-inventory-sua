@@ -1,7 +1,5 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:inventory/Category/category.dart';
 import 'package:inventory/Types/product._type.dart';
 import 'package:inventory/Utils/database_helper.dart';
 
@@ -110,6 +108,7 @@ class AddProductState extends State<AddProduct> {
           shrinkWrap: true,
           padding: EdgeInsets.only(left: 24.0, right: 24.0),
           children: <Widget>[
+
             SizedBox(height: 24.0),
             productName,
             SizedBox(height: 10.0),

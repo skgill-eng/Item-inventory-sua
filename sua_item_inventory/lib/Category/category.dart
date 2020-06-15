@@ -18,6 +18,7 @@ class CategoryState extends State<Category> {
   List<CategoryType> categoryList;
   int count = 0;
   int categoryId;
+  String categoryName;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class CategoryState extends State<Category> {
       appBar: AppBar(
         title: Center(
           child: Text(
-            'Category Name',
+            'All Categories',
             textAlign: TextAlign.center,
           ),
         ),
@@ -62,8 +63,12 @@ class CategoryState extends State<Category> {
                             color: Colors.blue,
                           ),
                           onTap: () {
+                            String updateAppBarTitleText;
+                            updateAppBarTitleText ='Update '+this.categoryList[position].category_name+' Category';
                             navigateToDetail(
-                                this.categoryList[position], 'Edit Category');
+
+
+                                this.categoryList[position],updateAppBarTitleText);
                           },
                         ),
                       ),
@@ -84,12 +89,13 @@ class CategoryState extends State<Category> {
                   onTap: () {
                     setState(() {
                       categoryId = this.categoryList[position].category_id;
+                      categoryName=this.categoryList[position].category_name;
                     });
                     debugPrint("ListTile Tapped");
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
 
-                      return Product(categoryId);
+                      return Product(categoryId,categoryName);
                     }));
                     //navigateToDetail(this.todoList[position], 'Edit Todo');
                   },
