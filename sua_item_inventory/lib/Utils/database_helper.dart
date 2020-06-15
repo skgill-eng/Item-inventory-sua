@@ -5,11 +5,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:inventory/Types/category_type.dart';
 import 'package:inventory/Types/product._type.dart';
 
-
 class DatabaseHelper {
-
-  static DatabaseHelper _databaseHelper;    // Singleton DatabaseHelper
-  static Database _database;                // Singleton Database
+  static DatabaseHelper _databaseHelper; // Singleton DatabaseHelper
+  static Database _database; // Singleton Database
 
   String categoryTableName = 'category_table_name';
   String productTable = 'product_table';
@@ -21,21 +19,20 @@ class DatabaseHelper {
   String proSP = 'product_sell_price';
   String createdBy = 'created_by';
   String updatedBy = 'updated_by';
-  String createDate='createDate' ;
-  String updateDate='updateDate' ;
+  String createDate = 'createDate';
+  String updateDate = 'updateDate';
 
   DatabaseHelper._createInstance(); // Named constructor to create instance of DatabaseHelper
 
   factory DatabaseHelper() {
-
     if (_databaseHelper == null) {
-      _databaseHelper = DatabaseHelper._createInstance(); // This is executed only once, singleton object
+      _databaseHelper = DatabaseHelper
+          ._createInstance(); // This is executed only once, singleton object
     }
     return _databaseHelper;
   }
 
   Future<Database> get database async {
-
     if (_database == null) {
       _database = await initializeDatabase();
     }
@@ -48,24 +45,20 @@ class DatabaseHelper {
     String path = directory.path + 'itemInventory.db';
 
     // Open/create the database at a given path
-    var itemInventoryDatabase = await openDatabase(path, version: 1, onCreate: _createDb);
+    var itemInventoryDatabase =
+        await openDatabase(path, version: 1, onCreate: _createDb);
     return itemInventoryDatabase;
   }
-//
-//  /// Let's use FOREIGN KEY constraints
-//  Future onConfigure(Database db) async {
-//    await db.execute('PRAGMA foreign_keys = ON');
-//  }
 
   void _createDb(Database db, int newVersion) async {
-
-    await db.execute('CREATE TABLE $categoryTableName($catID INTEGER PRIMARY KEY AUTOINCREMENT, $catName TEXT, '
+    await db.execute(
+        'CREATE TABLE $categoryTableName($catID INTEGER PRIMARY KEY AUTOINCREMENT, $catName TEXT, '
         '$createdBy TEXT, $updatedBy TEXT,$createDate TEXT,$updateDate TEXT)');
 
-    await db.execute('CREATE TABLE $productTable($proId INTEGER PRIMARY KEY AUTOINCREMENT,$catID INTEGER ,$proName TEXT, '
+    await db.execute(
+        'CREATE TABLE $productTable($proId INTEGER PRIMARY KEY AUTOINCREMENT,$catID INTEGER ,$proName TEXT, '
         '$proCP TEXT,$proSP TEXT,$createdBy TEXT, $updatedBy TEXT,$createDate TEXT,'
         '$updateDate TEXT)');
-
   }
 
   // Fetch Operation: Get all category_type objects from database
@@ -85,30 +78,34 @@ class DatabaseHelper {
   // Update Operation: Update a category_type object and save it to database
   Future<int> updateCategory(CategoryType categoryType) async {
     var db = await this.database;
-    var result = await db.update(categoryTableName, categoryType.toMap(), where: '$catID = ?', whereArgs: [categoryType.category_id]);
+    var result = await db.update(categoryTableName, categoryType.toMap(),
+        where: '$catID = ?', whereArgs: [categoryType.category_id]);
     return result;
   }
 
   // Delete Operation: Delete a category_type object from database
   Future<int> deleteCategory(int id) async {
     var db = await this.database;
-    int result = await db.rawDelete('DELETE FROM $categoryTableName WHERE $catID = $id');
+    int result =
+        await db.rawDelete('DELETE FROM $categoryTableName WHERE $catID = $id');
     return result;
   }
 
   // Get number of category_type objects in database
   Future<int> getCategoryCount() async {
     Database db = await this.database;
-    List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from $categoryTableName');
+    List<Map<String, dynamic>> x =
+        await db.rawQuery('SELECT COUNT (*) from $categoryTableName');
     int result = Sqflite.firstIntValue(x);
     return result;
   }
 
   // Get the 'Map List' [ List<Map> ] and convert it to 'category List' [ List<CategoryType> ]
   Future<List<CategoryType>> getCategoryList() async {
-
-    var categoryMapList = await getCategoryTypeMapList(); // Get 'Map List' from database
-    int count = categoryMapList.length;         // Count the number of map entries in db table
+    var categoryMapList =
+        await getCategoryTypeMapList(); // Get 'Map List' from database
+    int count =
+        categoryMapList.length; // Count the number of map entries in db table
 
     List<CategoryType> categoryList = List<CategoryType>();
     // For loop to create a 'category List' from a 'Map List'
@@ -119,14 +116,14 @@ class DatabaseHelper {
     return categoryList;
   }
 
-
   // Fetch Operation: Get all product_type objects from database
   Future<List<Map<String, dynamic>>> getProductTypeMapList(int cid) async {
     Database db = await this.database;
 //    var result = await db.query(productTable ,where: '$catID = ?',
 //        whereArgs: [cid],orderBy: '$proName ASC');
 
-    var result = await db.rawQuery('select * FROM $productTable WHERE $catID= $cid') ;
+    var result =
+        await db.rawQuery('select * FROM $productTable WHERE $catID= $cid');
 
     return result;
   }
@@ -135,40 +132,40 @@ class DatabaseHelper {
   Future<int> insertProduct(ProductType productType) async {
     Database db = await this.database;
     var result = await db.insert(productTable, productType.toMap());
-    print(result) ;
     return result;
   }
 
   // Update Operation: Update a product_type object and save it to database
   Future<int> updateProduct(ProductType productType) async {
     var db = await this.database;
-    var result = await db.update(productTable, productType.toMap(), where: '$proId = ?', whereArgs: [productType.product_id]);
+    var result = await db.update(productTable, productType.toMap(),
+        where: '$proId = ?', whereArgs: [productType.product_id]);
     return result;
   }
 
   // Delete Operation: Delete a product_type object from database
   Future<int> deleteProduct(int id) async {
     var db = await this.database;
-    int result = await db.rawDelete('DELETE FROM $productTable WHERE $proId = $id');
+    int result =
+        await db.rawDelete('DELETE FROM $productTable WHERE $proId = $id');
     return result;
   }
 
   // Get number of product_type objects in database
   Future<int> getProductCount(int cid) async {
     Database db = await this.database;
-    List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from $productTable where $catID = $cid ');
+    List<Map<String, dynamic>> x = await db
+        .rawQuery('SELECT COUNT (*) from $productTable where $catID = $cid ');
     int result = Sqflite.firstIntValue(x);
     return result;
   }
 
   // Get the 'Map List' [ List<Map> ] and convert it to 'product List' [ List<ProductType> ]
   Future<List<ProductType>> getProductList(int cid) async {
-
-    print('getProductList');
-    print(cid);
-
-    var productMapList = await getProductTypeMapList(cid); // Get 'Map List' from database
-    int count = productMapList.length;         // Count the number of map entries in db table
+    var productMapList =
+        await getProductTypeMapList(cid); // Get 'Map List' from database
+    int count =
+        productMapList.length; // Count the number of map entries in db table
 
     List<ProductType> productList = List<ProductType>();
     // For loop to create a 'product List' from a 'Map List'
@@ -178,6 +175,4 @@ class DatabaseHelper {
 
     return productList;
   }
-
-
 }

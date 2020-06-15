@@ -144,7 +144,7 @@ class AddProductState extends State<AddProduct> {
       print("Success");// Success
       //_showAlertDialog('Status', 'Category Saved Successfully');
     } else {
-      print("Failue");// Failure
+      print("Failure");// Failure
       //_showAlertDialog('Status', 'Problem Saving Category');
     }
 

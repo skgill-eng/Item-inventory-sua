@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:inventory/Category/category.dart';
 
-
 class Login extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -11,10 +10,8 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
-
   @override
   Widget build(BuildContext context) {
-
     final logo = Hero(
       tag: 'hero',
       child: CircleAvatar(
@@ -53,11 +50,10 @@ class LoginState extends State<Login> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) {
             return Category();
           }));
-
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
@@ -88,4 +84,3 @@ class LoginState extends State<Login> {
     );
   }
 }
-

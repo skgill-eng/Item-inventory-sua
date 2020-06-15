@@ -1,15 +1,12 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:inventory/Category/category.dart';
 import 'package:inventory/Types/category_type.dart';
 import 'package:inventory/Utils/database_helper.dart';
 
-
 class AddCategory extends StatefulWidget {
-    final String appBarTitle;
-    final CategoryType category;
-    AddCategory(this.category, this.appBarTitle);
+  final String appBarTitle;
+  final CategoryType category;
+  AddCategory(this.category, this.appBarTitle);
   @override
   State<StatefulWidget> createState() {
     return AddCategoryState(this.category, this.appBarTitle);
@@ -17,7 +14,6 @@ class AddCategory extends StatefulWidget {
 }
 
 class AddCategoryState extends State<AddCategory> {
-
   DatabaseHelper helper = DatabaseHelper();
 
   String appBarTitle;
@@ -25,17 +21,15 @@ class AddCategoryState extends State<AddCategory> {
 
   TextEditingController categoryNameController = TextEditingController();
 
-
   AddCategoryState(this.category, this.appBarTitle);
 
   @override
   Widget build(BuildContext context) {
-
     final categoryName = TextFormField(
       controller: categoryNameController,
       keyboardType: TextInputType.text,
       autofocus: false,
-      onChanged: (value){
+      onChanged: (value) {
         debugPrint('Something changed in Title Text Field');
         category.category_name = categoryNameController.text;
       },
@@ -56,7 +50,7 @@ class AddCategoryState extends State<AddCategory> {
         onPressed: () {
           setState(() {
             debugPrint("Save button clicked");
-           _save();
+            _save();
           });
         },
         padding: EdgeInsets.all(12),
@@ -70,7 +64,6 @@ class AddCategoryState extends State<AddCategory> {
     return Scaffold(
       appBar: AppBar(
         title: Text(appBarTitle),
-
       ),
       body: Center(
         child: ListView(
@@ -79,7 +72,6 @@ class AddCategoryState extends State<AddCategory> {
           children: <Widget>[
             SizedBox(height: 48.0),
             categoryName,
-
             SizedBox(height: 24.0),
             saveButton
           ],
@@ -89,41 +81,36 @@ class AddCategoryState extends State<AddCategory> {
   }
 
   void _save() async {
-
     Navigator.pop(context, true);
     category.created_by = "Udai";
     category.updated_by = "Udai";
-    category.create_date =  DateFormat.yMMMd().format(DateTime.now());
-    category.update_date =  DateFormat.yMMMd().format(DateTime.now());
+    category.create_date = DateFormat.yMMMd().format(DateTime.now());
+    category.update_date = DateFormat.yMMMd().format(DateTime.now());
     int result;
-    if (category.category_id != null) {  // Case 1: Update operation
+    if (category.category_id != null) {
+      // Case 1: Update operation
       result = await helper.updateCategory(category);
-      print("Update category"+category.category_id.toString());
-    } else {// Case 2: Insert Operation
+      print("Update category" + category.category_id.toString());
+    } else {
+      // Case 2: Insert Operation
       result = await helper.insertCategory(category);
-      print("Insert category"+category.category_id.toString());
+      print("Insert category" + category.category_id.toString());
     }
 
     if (result != 0) {
-      print("Success");// Success
+      print("Success"); // Success
       //_showAlertDialog('Status', 'Category Saved Successfully');
     } else {
-      print("Failue");// Failure
+      print("Failure"); // Failure
       //_showAlertDialog('Status', 'Problem Saving Category');
     }
-
   }
 
   void _showAlertDialog(String title, String message) {
-
     AlertDialog alertDialog = AlertDialog(
       title: Text(title),
       content: Text(message),
     );
-    showDialog(
-        context: context,
-        builder: (_) => alertDialog
-    );
+    showDialog(context: context, builder: (_) => alertDialog);
   }
 }
-

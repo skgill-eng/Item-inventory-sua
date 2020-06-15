@@ -7,9 +7,10 @@ import 'package:inventory/Utils/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Product extends StatefulWidget {
-  int categoryId = 0;
+  final categoryId;
 
-  Product(int categoryId);
+  Product(this.categoryId);
+
   @override
   State<StatefulWidget> createState() {
     return ProductState();
@@ -17,9 +18,6 @@ class Product extends StatefulWidget {
 }
 
 class ProductState extends State<Product> {
-
-  int categoryId;
-
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<ProductType> productList;
   int count = 0;
@@ -40,8 +38,8 @@ class ProductState extends State<Product> {
       ),
       body: Container(
         child: ListView.builder(
-            itemCount: count ,
-            itemBuilder: (BuildContext context, int position){
+            itemCount: count,
+            itemBuilder: (BuildContext context, int position) {
               return Card(
                 color: Colors.white,
                 elevation: 2.0,
@@ -58,16 +56,22 @@ class ProductState extends State<Product> {
                     children: <Widget>[
                       Container(
                         //margin: EdgeInsets.only(left: 10.0),
-                        child: Text('CP:- Rs'+this.productList[position].product_cost_price,
-                          style: TextStyle(fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: Colors.red),
+                        child: Text(
+                          'CP : ₹' +
+                              this.productList[position].product_cost_price,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Colors.red),
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.only(left: 20.0),
-                        child: Text('SP:- Rs'+this.productList[position].product_sell_price,
-                          style: TextStyle(fontWeight: FontWeight.bold,
+                        child: Text(
+                          'SP : ₹' +
+                              this.productList[position].product_sell_price,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
                               fontSize: 15,
                               color: Colors.red),
                         ),
@@ -80,16 +84,23 @@ class ProductState extends State<Product> {
                       Container(
                         margin: EdgeInsets.only(left: 10.0),
                         child: GestureDetector(
-                          child: Icon(Icons.edit,color: Colors.blue,),
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.blue,
+                          ),
                           onTap: () {
-                            navigateToDetail(this.productList[position], 'Edit Product');
+                            navigateToDetail(
+                                this.productList[position], 'Edit Product');
                           },
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.only(left: 10.0),
                         child: GestureDetector(
-                          child: Icon(Icons.delete,color: Colors.red,),
+                          child: Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
                           onTap: () {
                             _delete(context, productList[position]);
                           },
@@ -98,16 +109,17 @@ class ProductState extends State<Product> {
                     ],
                   ),
                   onTap: () {
-                    debugPrint("ListTile Tapped");
                     //navigateToDetail(this.todoList[position], 'Edit Todo');
                   },
                 ),
               );
             }),
       ),
-      floatingActionButton:FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
-          navigateToDetail(ProductType(widget.categoryId,'','', '', '','','',''), 'Poduct Details');
+          navigateToDetail(
+              ProductType(widget.categoryId, '', '', '', '', '', '', ''),
+              'Product Details');
         },
         child: Icon(Icons.add),
       ),
@@ -116,7 +128,7 @@ class ProductState extends State<Product> {
 
   void navigateToDetail(ProductType product, String title) async {
     bool result =
-    await Navigator.push(context, MaterialPageRoute(builder: (context) {
+        await Navigator.push(context, MaterialPageRoute(builder: (context) {
       return AddProduct(product, title);
     }));
 
@@ -136,7 +148,8 @@ class ProductState extends State<Product> {
   void updateListView() {
     final Future<Database> dbFuture = databaseHelper.initializeDatabase();
     dbFuture.then((database) {
-      Future<List<ProductType>> productListFuture = databaseHelper.getProductList();
+      Future<List<ProductType>> productListFuture =
+          databaseHelper.getProductList(widget.categoryId);
       productListFuture.then((productList) {
         setState(() {
           this.productList = productList;
@@ -146,4 +159,3 @@ class ProductState extends State<Product> {
     });
   }
 }
-
