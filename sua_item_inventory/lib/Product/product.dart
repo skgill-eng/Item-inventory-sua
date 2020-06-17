@@ -42,7 +42,32 @@ class ProductState extends State<Product> {
         ),
       ),
       body: Container(
-        child: ListView.builder(
+          padding: EdgeInsets.all(9.0),
+        child: Column(
+            children: <Widget>[
+        Container(
+        child: new Row(
+            mainAxisAlignment:
+            MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+
+              new Container(
+                width: MediaQuery.of(context).size.width - 100.0,
+                child: new TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Search Category',
+                      //onSearchTextChanged,
+                    ),
+                    onChanged: (String searchText) async {
+                      updateSearchListView(searchText);
+                    }),
+              ),
+              new Icon(Icons.search),
+            ]
+        )
+      ),
+        Expanded(
+        child:ListView.builder(
             itemCount: count,
             itemBuilder: (BuildContext context, int position) {
               return Card(
@@ -122,6 +147,9 @@ class ProductState extends State<Product> {
               );
             }),
       ),
+      ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           navigateToDetail(
@@ -157,6 +185,19 @@ class ProductState extends State<Product> {
     dbFuture.then((database) {
       Future<List<ProductType>> productListFuture =
           databaseHelper.getProductList(widget.categoryId);
+      productListFuture.then((productList) {
+        setState(() {
+          this.productList = productList;
+          this.count = productList.length;
+        });
+      });
+    });
+  }
+  void updateSearchListView(String searchText) {
+    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
+    dbFuture.then((database) {
+      Future<List<ProductType>> productListFuture =
+      databaseHelper.searchProductList(searchText);
       productListFuture.then((productList) {
         setState(() {
           this.productList = productList;

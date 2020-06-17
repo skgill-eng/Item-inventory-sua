@@ -14,6 +14,9 @@ class Category extends StatefulWidget {
 }
 
 class CategoryState extends State<Category> {
+
+  TextEditingController searchController = TextEditingController();
+
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<CategoryType> categoryList;
   int count = 0;
@@ -37,71 +40,99 @@ class CategoryState extends State<Category> {
         ),
       ),
       body: Container(
-        child: ListView.builder(
-            itemCount: count,
-            itemBuilder: (BuildContext context, int position) {
-              return Card(
-                color: Colors.white,
-                elevation: 2.0,
-                child: ListTile(
+          padding: EdgeInsets.all(9.0),
+          child: Column(
+              children: <Widget>[
+            Container(
+                child: new Row(
+                    mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+
+                      new Container(
+                        width: MediaQuery.of(context).size.width - 100.0,
+                        child: new TextField(
+                            decoration: InputDecoration(
+                              hintText: 'Search Category',
+                              //onSearchTextChanged,
+                            ),
+                            onChanged: (String searchText) async {
+                              updateSearchListView(searchText);
+                            }),
+                      ),
+                      new Icon(Icons.search),
+                    ]
+                )
+            ),
+            Expanded(
+              child: ListView.builder(
+                  itemCount: count,
+                  itemBuilder: (BuildContext context, int position) {
+                    return Card(
+                      color: Colors.white,
+                      elevation: 2.0,
+                      child: ListTile(
 //              leading: CircleAvatar(
 //                backgroundColor: Colors.amber,
 //                child: Text(getFirstLetter(this.todoList[position].title),
 //                    style: TextStyle(fontWeight: FontWeight.bold)),
 //              ),
-                  title: Text(this.categoryList[position].category_name,
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  //subtitle: Text(this.todoList[position].date),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(left: 10.0),
-                        child: GestureDetector(
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.blue,
-                          ),
-                          onTap: () {
-                            String updateAppBarTitleText;
-                            updateAppBarTitleText ='Update '+this.categoryList[position].category_name+' Category';
-                            navigateToDetail(
+                        title: Text(this.categoryList[position].category_name,
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        //subtitle: Text(this.todoList[position].date),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(left: 10.0),
+                              child: GestureDetector(
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Colors.blue,
+                                ),
+                                onTap: () {
+                                  String updateAppBarTitleText;
+                                  updateAppBarTitleText ='Update '+this.categoryList[position].category_name+' Category';
+                                  navigateToDetail(
 
 
-                                this.categoryList[position],updateAppBarTitleText);
-                          },
+                                      this.categoryList[position],updateAppBarTitleText);
+                                },
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(left: 10.0),
+                              child: GestureDetector(
+                                child: Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                ),
+                                onTap: () {
+                                  _delete(context, categoryList[position]);
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 10.0),
-                        child: GestureDetector(
-                          child: Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          ),
-                          onTap: () {
-                            _delete(context, categoryList[position]);
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  onTap: () {
-                    setState(() {
-                      categoryId = this.categoryList[position].category_id;
-                      categoryName=this.categoryList[position].category_name;
-                    });
-                    debugPrint("ListTile Tapped");
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
+                        onTap: () {
+                          setState(() {
+                            categoryId = this.categoryList[position].category_id;
+                            categoryName=this.categoryList[position].category_name;
+                          });
+                          debugPrint("ListTile Tapped");
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
 
-                      return Product(categoryId,categoryName);
-                    }));
-                    //navigateToDetail(this.todoList[position], 'Edit Todo');
-                  },
-                ),
-              );
-            }),
+                            return Product(categoryId,categoryName);
+                          }));
+                          //navigateToDetail(this.todoList[position], 'Edit Todo');
+                        },
+                      ),
+                    );
+                  }),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -132,11 +163,26 @@ class CategoryState extends State<Category> {
     }
   }
 
+
   void updateListView() {
     final Future<Database> dbFuture = databaseHelper.initializeDatabase();
     dbFuture.then((database) {
       Future<List<CategoryType>> categoryListFuture =
           databaseHelper.getCategoryList();
+      categoryListFuture.then((categoryList) {
+        setState(() {
+          this.categoryList = categoryList;
+          this.count = categoryList.length;
+        });
+      });
+    });
+  }
+
+  void updateSearchListView(String searchText) {
+    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
+    dbFuture.then((database) {
+      Future<List<CategoryType>> categoryListFuture =
+      databaseHelper.searchCategoryList(searchText);
       categoryListFuture.then((categoryList) {
         setState(() {
           this.categoryList = categoryList;

@@ -68,6 +68,13 @@ class DatabaseHelper {
     return result;
   }
 
+  Future<List<Map<String, dynamic>>> searchCategory(String searchText) async {
+    Database db = await this.database;
+    var result =
+    await db.rawQuery("SELECT * FROM $categoryTableName WHERE $catName LIKE '$searchText%'");
+    return result;
+  }
+
   // Insert Operation: Insert a category_type object to database
   Future<int> insertCategory(CategoryType categoryType) async {
     Database db = await this.database;
@@ -116,6 +123,23 @@ class DatabaseHelper {
     return categoryList;
   }
 
+
+  Future<List<CategoryType>> searchCategoryList(String searchText) async {
+    var categoryMapList =
+    await searchCategory(searchText); // Get 'Map List' from database
+    int count =
+        categoryMapList.length; // Count the number of map entries in db table
+
+    List<CategoryType> categoryList = List<CategoryType>();
+    // For loop to create a 'category List' from a 'Map List'
+    for (int i = 0; i < count; i++) {
+      categoryList.add(CategoryType.fromMapObject(categoryMapList[i]));
+    }
+
+    return categoryList;
+  }
+
+
   // Fetch Operation: Get all product_type objects from database
   Future<List<Map<String, dynamic>>> getProductTypeMapList(int cid) async {
     Database db = await this.database;
@@ -127,6 +151,14 @@ class DatabaseHelper {
 
     return result;
   }
+
+  Future<List<Map<String, dynamic>>> searchProduct(String searchText) async {
+    Database db = await this.database;
+    var result =
+    await db.rawQuery("SELECT * FROM $productTable WHERE $proName LIKE '$searchText%'");
+    return result;
+  }
+
 
   // Insert Operation: Insert a product_type object to database
   Future<int> insertProduct(ProductType productType) async {
@@ -175,4 +207,20 @@ class DatabaseHelper {
 
     return productList;
   }
+
+  Future<List<ProductType>> searchProductList(String searchText) async {
+    var productMapList =
+    await searchProduct(searchText); // Get 'Map List' from database
+    int count =
+        productMapList.length; // Count the number of map entries in db table
+
+    List<ProductType> productList = List<ProductType>();
+    // For loop to create a 'product List' from a 'Map List'
+    for (int i = 0; i < count; i++) {
+      productList.add(ProductType.fromMapObject(productMapList[i]));
+    }
+
+    return productList;
+  }
+
 }
