@@ -12,6 +12,7 @@ class AddCategory extends StatefulWidget {
     return AddCategoryState(this.category, this.appBarTitle);
   }
 }
+bool categoryValidator = false;
 
 class AddCategoryState extends State<AddCategory> {
   DatabaseHelper helper = DatabaseHelper();
@@ -19,28 +20,52 @@ class AddCategoryState extends State<AddCategory> {
   String appBarTitle;
   CategoryType category;
 
+
   TextEditingController categoryNameController = TextEditingController();
 
   AddCategoryState(this.category, this.appBarTitle);
+  void initState(){
+    super.initState();
+//    categoryNameController.addListener(() {
+//      setState(() {
+//        validateCategoryName(categoryNameController.text);
+//      });
+//    });
+  }
+
+  static String validateCategoryName(String value){
+    if(value.isEmpty && value.length == 0){
+      categoryValidator = false;
+      return null;
+    }else{
+      categoryValidator = true;
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final categoryName = TextFormField(
       controller: categoryNameController,
+       //validator: validateCategoryName,
       keyboardType: TextInputType.text,
-      autofocus: false,
+      autofocus: true,
+      //autovalidate: true,
       onChanged: (value) {
         debugPrint('Something changed in Title Text Field');
         category.category_name = categoryNameController.text;
       },
+//      onFieldSubmitted: (value){
+//        category.category_name = categoryNameController.text;
+//      },
       //initialValue: 'udaisingh@gmail.com',
       decoration: InputDecoration(
-        hintText: 'Enter Category Name',
+        labelText: "Category Name",
+        //hintText: 'Enter Category Name',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
     );
-
     final saveButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
@@ -48,10 +73,11 @@ class AddCategoryState extends State<AddCategory> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
+         categoryNameController.text.isNotEmpty || categoryNameController.text.length != 0?
           setState(() {
             debugPrint("Save button clicked");
             _save();
-          });
+          }):showAlertDialog(context);
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
@@ -113,4 +139,31 @@ class AddCategoryState extends State<AddCategory> {
     );
     showDialog(context: context, builder: (_) => alertDialog);
   }
+}
+showAlertDialog(BuildContext context) {
+
+  // set up the button
+  Widget okButton = FlatButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Error"),
+    content: Text("Enter Category Name"),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

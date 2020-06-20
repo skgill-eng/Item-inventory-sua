@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:inventory/Category/add_category.dart';
 import 'package:inventory/Product/add_product.dart';
@@ -45,28 +46,31 @@ class ProductState extends State<Product> {
           padding: EdgeInsets.all(9.0),
         child: Column(
             children: <Widget>[
-        Container(
-        child: new Row(
-            mainAxisAlignment:
-            MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-
-              new Container(
-                width: MediaQuery.of(context).size.width - 100.0,
-                child: new TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search Category',
-                      //onSearchTextChanged,
-                    ),
-                    onChanged: (String searchText) async {
-                      updateSearchListView(searchText);
-                    }),
+          Container(
+          margin: EdgeInsets.all(10.0),
+          child: new TextField(
+              decoration: InputDecoration(
+                enabledBorder:  const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  borderSide: const BorderSide(
+                    color: Colors.blue,
+                  ),
+                ),
+                focusedBorder: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  borderSide: const BorderSide(
+                    color: Colors.blue,
+                  ),
+                ),
+                prefixIcon: Icon(Icons.search),
+                hintText: 'Search Product',
+                //onSearchTextChanged,
               ),
-              new Icon(Icons.search),
-            ]
-        )
-      ),
-        Expanded(
+              onChanged: (String searchText) async {
+                updateSearchListView(searchText);
+              }),
+        ),
+          Expanded(
         child:ListView.builder(
             itemCount: count,
             itemBuilder: (BuildContext context, int position) {
@@ -207,3 +211,4 @@ class ProductState extends State<Product> {
     });
   }
 }
+

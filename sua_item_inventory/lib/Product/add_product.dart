@@ -41,7 +41,8 @@ class AddProductState extends State<AddProduct> {
         product.product_name = productNameController.text;
       },
       decoration: InputDecoration(
-        hintText: 'Enter Product Name',
+        labelText: "Product Name",
+        //hintText: 'Enter Product Name',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
@@ -57,7 +58,8 @@ class AddProductState extends State<AddProduct> {
         product.product_cost_price = productCostPriceController.text;
       },
       decoration: InputDecoration(
-        hintText: 'Enter Product Cost Price',
+        labelText: "Product Cost Price",
+        //hintText: 'Enter Product Cost Price',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
@@ -73,7 +75,8 @@ class AddProductState extends State<AddProduct> {
         product.product_sell_price = productSellingPriceController.text;
       },
       decoration: InputDecoration(
-        hintText: 'Enter Product Selling Price',
+        labelText: "Product Selling Price",
+        //hintText: 'Enter Product Selling Price',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
@@ -86,7 +89,10 @@ class AddProductState extends State<AddProduct> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          _save();
+          productNameController.text.isNotEmpty && productSellingPriceController.text.isNotEmpty?
+          setState(() {
+            _save();
+          }):showAlertDialog(context);
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
@@ -111,9 +117,9 @@ class AddProductState extends State<AddProduct> {
 
             SizedBox(height: 24.0),
             productName,
-            SizedBox(height: 10.0),
+            SizedBox(height: 20.0),
             productCostPrice,
-            SizedBox(height: 10.0),
+            SizedBox(height: 20.0),
             productSellingPrice,
             SizedBox(height: 24.0),
             saveButton
@@ -148,5 +154,35 @@ class AddProductState extends State<AddProduct> {
     }
 
   }
+}
+
+showAlertDialog(BuildContext context) {
+
+  // set up the button
+  Widget okButton = FlatButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Error"),
+    content: Text(
+        "Enter Details"
+    ),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
 

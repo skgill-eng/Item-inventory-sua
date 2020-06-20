@@ -44,25 +44,28 @@ class CategoryState extends State<Category> {
           child: Column(
               children: <Widget>[
             Container(
-                child: new Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-
-                      new Container(
-                        width: MediaQuery.of(context).size.width - 100.0,
-                        child: new TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Search Category',
-                              //onSearchTextChanged,
-                            ),
-                            onChanged: (String searchText) async {
-                              updateSearchListView(searchText);
-                            }),
+              margin: EdgeInsets.all(10.0),
+              child: new TextField(
+                  decoration: InputDecoration(
+                    enabledBorder:  const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: const BorderSide(
+                        color: Colors.blue,
                       ),
-                      new Icon(Icons.search),
-                    ]
-                )
+                    ),
+                    focusedBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: const BorderSide(
+                        color: Colors.blue,
+                      ),
+                    ),
+                    prefixIcon: Icon(Icons.search),
+                    hintText: 'Search Category',
+                    //onSearchTextChanged,
+                  ),
+                  onChanged: (String searchText) async {
+                    updateSearchListView(searchText);
+                  }),
             ),
             Expanded(
               child: ListView.builder(
