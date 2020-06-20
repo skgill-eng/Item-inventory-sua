@@ -1,3 +1,4 @@
+import 'package:inventory/Types/purchaseOrderType.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'dart:io';
@@ -21,6 +22,11 @@ class DatabaseHelper {
   String updatedBy = 'updated_by';
   String createDate = 'createDate';
   String updateDate = 'updateDate';
+
+  String poTable = 'po_table';
+  String POID = 'PO_id';
+  String POName = 'PO_name';
+  String POprice = 'PO_price';
 
   DatabaseHelper._createInstance(); // Named constructor to create instance of DatabaseHelper
 
@@ -59,6 +65,11 @@ class DatabaseHelper {
         'CREATE TABLE $productTable($proId INTEGER PRIMARY KEY AUTOINCREMENT,$catID INTEGER ,$proName TEXT, '
         '$proCP TEXT,$proSP TEXT,$createdBy TEXT, $updatedBy TEXT,$createDate TEXT,'
         '$updateDate TEXT)');
+
+    await db.execute(
+        'CREATE TABLE $poTable($POID INTEGER PRIMARY KEY AUTOINCREMENT,$POName TEXT, '
+            '$POprice TEXT,$createdBy TEXT, $updatedBy TEXT,$createDate TEXT,'
+            '$updateDate TEXT)');
   }
 
   // Fetch Operation: Get all category_type objects from database
@@ -208,6 +219,34 @@ class DatabaseHelper {
     return productList;
   }
 
+  // Get the 'Map List' [ List<Map> ] and convert it to 'product List' [ List<ProductType> ]
+  Future<List<ProductType>> getComplateProductList() async {
+    var productMapList =
+    await getComplateProductTypeMapList(); // Get 'Map List' from database
+    int count =
+        productMapList.length; // Count the number of map entries in db table
+
+    List<ProductType> productList = List<ProductType>();
+    // For loop to create a 'product List' from a 'Map List'
+    for (int i = 0; i < count; i++) {
+      productList.add(ProductType.fromMapObject(productMapList[i]));
+    }
+
+    return productList;
+  }
+
+  // Fetch Operation: Get all product_type objects from database
+  Future<List<Map<String, dynamic>>> getComplateProductTypeMapList() async {
+    Database db = await this.database;
+//    var result = await db.query(productTable ,where: '$catID = ?',
+//        whereArgs: [cid],orderBy: '$proName ASC');
+
+    var result =
+    await db.rawQuery('select * FROM $productTable');
+
+    return result;
+  }
+
   Future<List<ProductType>> searchProductList(String searchText) async {
     var productMapList =
     await searchProduct(searchText); // Get 'Map List' from database
@@ -223,4 +262,60 @@ class DatabaseHelper {
     return productList;
   }
 
+  // Get the 'Map List' [ List<Map> ] and convert it to 'product List' [ List<ProductType> ]
+  Future<List<POType>> getComplatePOList() async {
+    var poMapList =
+    await getComplatePOMapList(); // Get 'Map List' from database
+    int count =
+        poMapList.length; // Count the number of map entries in db table
+
+    List<POType> poList = List<POType>();
+    // For loop to create a 'product List' from a 'Map List'
+    for (int i = 0; i < count; i++) {
+      poList.add(POType.fromMapObject(poMapList[i]));
+    }
+  }
+
+  // Fetch Operation: Get all product_type objects from database
+  Future<List<Map<String, dynamic>>> getComplatePOMapList() async {
+    Database db = await this.database;
+//    var result = await db.query(productTable ,where: '$catID = ?',
+//        whereArgs: [cid],orderBy: '$proName ASC');
+
+    var result =
+    await db.rawQuery('select * FROM $poTable');
+
+    return result;
+  }
+
+  // Get the 'Map List' [ List<Map> ] and convert it to 'product List' [ List<ProductType> ]
+  Future<List<POType>> getFilterPOList(String StartDate,String endDate) async {
+    var poMapList =
+    await getFilterPOMapList(StartDate,endDate); // Get 'Map List' from database
+    int count =
+        poMapList.length; // Count the number of map entries in db table
+
+    List<POType> poList = List<POType>();
+    // For loop to create a 'product List' from a 'Map List'
+    for (int i = 0; i < count; i++) {
+      poList.add(POType.fromMapObject(poMapList[i]));
+    }
+  }
+
+  // Fetch Operation: Get all product_type objects from database
+  Future<List<Map<String, dynamic>>> getFilterPOMapList(String StartDate,String endDate) async {
+    Database db = await this.database;
+//    var result = await db.query(productTable ,where: '$catID = ?',
+//        whereArgs: [cid],orderBy: '$proName ASC');
+
+    var result =
+    await db.rawQuery('select * FROM $poTable where $createDate BETWEEN $StartDate and $endDate');
+
+    return result;
+  }
+
+
+
+
 }
+

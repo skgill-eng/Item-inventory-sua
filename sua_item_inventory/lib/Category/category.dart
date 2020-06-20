@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:inventory/Category/add_category.dart';
 import 'package:inventory/Product/product.dart';
+import 'package:inventory/Product/search_products.dart';
 import 'package:inventory/Types/category_type.dart';
 import 'package:inventory/Utils/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
@@ -38,35 +39,52 @@ class CategoryState extends State<Category> {
             textAlign: TextAlign.center,
           ),
         ),
+        actions: <Widget>[
+          InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return SearchProduct();
+              }));
+            },
+            child: Container(
+              margin: EdgeInsets.only(right: 10),
+              child: Icon(
+                  Icons.search ,
+                  size: 40,
+                  color: Colors.black,
+              ),
+            ),
+          )
+        ],
       ),
       body: Container(
           padding: EdgeInsets.all(9.0),
           child: Column(
               children: <Widget>[
-            Container(
-              margin: EdgeInsets.all(10.0),
-              child: new TextField(
-                  decoration: InputDecoration(
-                    enabledBorder:  const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      borderSide: const BorderSide(
-                        color: Colors.blue,
+                Container(
+                  margin: EdgeInsets.all(10.0),
+                  child: new TextField(
+                      decoration: InputDecoration(
+                        enabledBorder:  const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: const BorderSide(
+                            color: Colors.blue,
+                          ),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: const BorderSide(
+                            color: Colors.blue,
+                          ),
+                        ),
+                        prefixIcon: Icon(Icons.search),
+                        hintText: 'Search Category',
+                        //onSearchTextChanged,
                       ),
-                    ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      borderSide: const BorderSide(
-                        color: Colors.blue,
-                      ),
-                    ),
-                    prefixIcon: Icon(Icons.search),
-                    hintText: 'Search Category',
-                    //onSearchTextChanged,
-                  ),
-                  onChanged: (String searchText) async {
-                    updateSearchListView(searchText);
-                  }),
-            ),
+                      onChanged: (String searchText) async {
+                        updateSearchListView(searchText);
+                      }),
+                ),
             Expanded(
               child: ListView.builder(
                   itemCount: count,
