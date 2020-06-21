@@ -134,7 +134,6 @@ class DatabaseHelper {
     return categoryList;
   }
 
-
   Future<List<CategoryType>> searchCategoryList(String searchText) async {
     var categoryMapList =
     await searchCategory(searchText); // Get 'Map List' from database
@@ -285,6 +284,7 @@ class DatabaseHelper {
     return productList;
   }
 
+
   // Get the 'Map List' [ List<Map> ] and convert it to 'product List' [ List<ProductType> ]
   Future<List<POType>> getComplatePOList() async {
     var poMapList =
@@ -297,6 +297,7 @@ class DatabaseHelper {
     for (int i = 0; i < count; i++) {
       poList.add(POType.fromMapObject(poMapList[i]));
     }
+    return poList;
   }
 
   // Fetch Operation: Get all product_type objects from database

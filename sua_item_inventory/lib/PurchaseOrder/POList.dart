@@ -22,16 +22,13 @@ class POListState extends State<POList> {
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<POType> poList;
   int count = 0;
-
+  String appBarTitleText='Purchase Order List';
   @override
   Widget build(BuildContext context) {
     if (poList == null) {
       poList = List<POType>();
       updateListView();
     }
-
-    String appBarTitleText='Purchase Order List';
-
 
     return Scaffold(
       appBar: AppBar(
@@ -185,13 +182,13 @@ class POListState extends State<POList> {
   void updateListView() {
     final Future<Database> dbFuture = databaseHelper.initializeDatabase();
     dbFuture.then((database) {
-      Future<List<POType>> poListFuture =
-      databaseHelper.getComplatePOList();
+      Future<List<POType>> poListFuture = databaseHelper.getComplatePOList();
       poListFuture.then((poList) {
         setState(() {
           this.poList = poList;
           this.count = poList.length;
         });
+        //print("PO LIST"+this.poList.toString());
       });
     });
   }

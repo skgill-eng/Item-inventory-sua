@@ -50,7 +50,7 @@ class CategoryState extends State<Category> {
             child: Container(
               margin: EdgeInsets.only(right: 10),
               child: Icon(
-                  Icons.info ,
+                  Icons.add,
                   size: 40,
                   color: Colors.black,
               ),

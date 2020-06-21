@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:inventory/Product/add_product.dart';
 import 'package:inventory/Types/product._type.dart';
 import 'package:inventory/Utils/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
@@ -22,7 +23,10 @@ class SearchProductState extends State<SearchProduct> {
 
   @override
   Widget build(BuildContext context) {
-
+    if (productList == null) {
+      productList = List<ProductType>();
+      updateListView();
+    }
     String appBarTitleText='Search Any Products';
     return Scaffold(
       appBar: AppBar(
@@ -80,7 +84,7 @@ class SearchProductState extends State<SearchProduct> {
                             Container(
                               //margin: EdgeInsets.only(left: 10.0),
                               child: Text(
-                                'Cost Price : ₹' +
+                                'CP : ₹' +
                                     this.productList[position].product_cost_price,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -89,9 +93,9 @@ class SearchProductState extends State<SearchProduct> {
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.only(left: 30.0),
+                              margin: EdgeInsets.only(left: 20.0),
                               child: Text(
-                                'Sell Price : ₹' +
+                                'SP : ₹' +
                                     this.productList[position].product_sell_price,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -111,6 +115,19 @@ class SearchProductState extends State<SearchProduct> {
     );
   }
 
+  void updateListView() {
+    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
+    dbFuture.then((database) {
+      Future<List<ProductType>> productListFuture =
+      databaseHelper.getComplateProductList();
+      productListFuture.then((productList) {
+        setState(() {
+          this.productList = productList;
+          this.count = productList.length;
+        });
+      });
+    });
+  }
   void updateSearchListView(String searchText) {
     final Future<Database> dbFuture = databaseHelper.initializeDatabase();
     dbFuture.then((database) {

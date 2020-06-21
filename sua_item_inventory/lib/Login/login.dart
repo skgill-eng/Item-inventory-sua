@@ -21,12 +21,21 @@ class LoginState extends State<Login> {
       ),
     );
 
+    final shopName = Text(
+      'SINGH URVARAK AGENCY',
+      style: TextStyle(
+          color: Colors.grey[800],
+          fontWeight: FontWeight.bold,
+          fontSize: 12)
+    );
+
     final email = TextFormField(
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
-      initialValue: 'xyz@gmail.com',
+      //initialValue: 'xyz@gmail.com',
       decoration: InputDecoration(
-        hintText: 'Email',
+        labelText: "Email",
+        //hintText: 'Email',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
@@ -34,10 +43,11 @@ class LoginState extends State<Login> {
 
     final password = TextFormField(
       autofocus: false,
-      initialValue: 'some password',
+      //initialValue: 'some password',
       obscureText: true,
       decoration: InputDecoration(
-        hintText: 'Password',
+        labelText: "Password",
+        //hintText: 'Password',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
@@ -72,7 +82,9 @@ class LoginState extends State<Login> {
           padding: EdgeInsets.only(left: 24.0, right: 24.0),
           children: <Widget>[
             logo,
-            SizedBox(height: 48.0),
+            SizedBox(height: 8.0),
+            Center(child: shopName),
+            SizedBox(height: 18.0),
             email,
             SizedBox(height: 8.0),
             password,
