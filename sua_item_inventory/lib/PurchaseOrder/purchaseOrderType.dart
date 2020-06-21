@@ -3,7 +3,7 @@ class POType
 
   int _PO_id;
   String _PO_name;
-  String _PO_price;
+  String _PO_amount;
   String _created_by;
   String _updated_by;
   String _create_date;
@@ -12,7 +12,7 @@ class POType
 
   POType(
       this._PO_name,
-      this._PO_price,
+      this._PO_amount,
       this._created_by,
       this._updated_by,
       this._create_date,
@@ -48,10 +48,10 @@ class POType
     this._created_by = value;
   }
 
-  String get PO_price => _PO_price;
+  String get PO_amount => _PO_amount;
 
-  set PO_price(String value) {
-    this._PO_price = value;
+  set PO_amount(String value) {
+    this._PO_amount = value;
   }
 
   String get PO_name => _PO_name;
@@ -69,7 +69,7 @@ class POType
       map['PO_id'] = _PO_id;
     }
     map['PO_name'] = _PO_name;
-    map['PO_price'] = _PO_price;
+    map['PO_amount'] = _PO_amount;
     map['created_by'] = _created_by;
     map['updated_by'] = _updated_by;
     map['createDate'] = _create_date;
@@ -80,7 +80,7 @@ class POType
   POType.fromMapObject(Map<String, dynamic> map) {
     this._PO_id = map['PO_id'];
     this._PO_name = map['PO_name'];
-    this._PO_price = map['PO_price'];
+    this._PO_amount = map['PO_amount'];
     this._created_by = map['created_by'];
     this._updated_by = map['updated_by'];
     this._create_date = map['createDate'];

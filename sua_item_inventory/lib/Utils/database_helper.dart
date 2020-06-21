@@ -1,4 +1,4 @@
-import 'package:inventory/Types/purchaseOrderType.dart';
+import 'package:inventory/PurchaseOrder/purchaseOrderType.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'dart:io';
@@ -26,7 +26,7 @@ class DatabaseHelper {
   String poTable = 'po_table';
   String POID = 'PO_id';
   String POName = 'PO_name';
-  String POprice = 'PO_price';
+  String POamount = 'PO_amount';
 
   DatabaseHelper._createInstance(); // Named constructor to create instance of DatabaseHelper
 
@@ -68,7 +68,7 @@ class DatabaseHelper {
 
     await db.execute(
         'CREATE TABLE $poTable($POID INTEGER PRIMARY KEY AUTOINCREMENT,$POName TEXT, '
-            '$POprice TEXT,$createdBy TEXT, $updatedBy TEXT,$createDate TEXT,'
+            '$POamount TEXT,$createdBy TEXT, $updatedBy TEXT,$createDate TEXT,'
             '$updateDate TEXT)');
   }
 
@@ -178,6 +178,13 @@ class DatabaseHelper {
     return result;
   }
 
+  // Insert Operation: Insert a po_type object to database
+  Future<int> insertPO(POType poType) async {
+    Database db = await this.database;
+    var result = await db.insert(poTable, poType.toMap());
+    return result;
+  }
+
   // Update Operation: Update a product_type object and save it to database
   Future<int> updateProduct(ProductType productType) async {
     var db = await this.database;
@@ -186,11 +193,27 @@ class DatabaseHelper {
     return result;
   }
 
+  // Update Operation: Update a po_type object and save it to database
+  Future<int> updatePO(POType po) async {
+    var db = await this.database;
+    var result = await db.update(poTable, po.toMap(),
+        where: '$POID = ?', whereArgs: [po.PO_id]);
+    return result;
+  }
+
   // Delete Operation: Delete a product_type object from database
   Future<int> deleteProduct(int id) async {
     var db = await this.database;
     int result =
         await db.rawDelete('DELETE FROM $productTable WHERE $proId = $id');
+    return result;
+  }
+
+  // Delete Operation: Delete a PO_type object from database
+  Future<int> deletePO(int id) async {
+    var db = await this.database;
+    int result =
+    await db.rawDelete('DELETE FROM $poTable WHERE $POID = $id');
     return result;
   }
 
@@ -279,11 +302,7 @@ class DatabaseHelper {
   // Fetch Operation: Get all product_type objects from database
   Future<List<Map<String, dynamic>>> getComplatePOMapList() async {
     Database db = await this.database;
-//    var result = await db.query(productTable ,where: '$catID = ?',
-//        whereArgs: [cid],orderBy: '$proName ASC');
-
-    var result =
-    await db.rawQuery('select * FROM $poTable');
+    var result = await db.query(poTable, orderBy: '$POName ASC');
 
     return result;
   }
@@ -314,6 +333,28 @@ class DatabaseHelper {
     return result;
   }
 
+  Future<List<POType>> searchPOList(String searchText) async {
+    var poMapList =
+    await searchPO(searchText); // Get 'Map List' from database
+    int count =
+        poMapList.length; // Count the number of map entries in db table
+
+    List<POType> poList = List<POType>();
+    // For loop to create a 'product List' from a 'Map List'
+    for (int i = 0; i < count; i++) {
+      poList.add(POType.fromMapObject(poMapList[i]));
+    }
+    return poList;
+  }
+
+
+
+    Future<List<Map<String, dynamic>>> searchPO(String searchText) async {
+      Database db = await this.database;
+      var result =
+      await db.rawQuery("SELECT * FROM $poTable WHERE $POName LIKE '$searchText%'");
+      return result;
+    }
 
 
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:inventory/Category/add_category.dart';
 import 'package:inventory/Product/product.dart';
 import 'package:inventory/Product/search_products.dart';
+import 'package:inventory/PurchaseOrder/POList.dart';
 import 'package:inventory/Types/category_type.dart';
 import 'package:inventory/Utils/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
@@ -43,15 +44,30 @@ class CategoryState extends State<Category> {
           InkWell(
             onTap: (){
               Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return POList();
+              }));
+            },
+            child: Container(
+              margin: EdgeInsets.only(right: 10),
+              child: Icon(
+                  Icons.info ,
+                  size: 40,
+                  color: Colors.black,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return SearchProduct();
               }));
             },
             child: Container(
               margin: EdgeInsets.only(right: 10),
               child: Icon(
-                  Icons.search ,
-                  size: 40,
-                  color: Colors.black,
+                Icons.search ,
+                size: 40,
+                color: Colors.black,
               ),
             ),
           )
