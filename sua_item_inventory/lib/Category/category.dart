@@ -44,21 +44,6 @@ class CategoryState extends State<Category> {
           InkWell(
             onTap: (){
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return POList();
-              }));
-            },
-            child: Container(
-              margin: EdgeInsets.only(right: 10),
-              child: Icon(
-                  Icons.add,
-                  size: 40,
-                  color: Colors.black,
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return SearchProduct();
               }));
             },

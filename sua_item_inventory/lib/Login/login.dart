@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:inventory/Category/category.dart';
+import 'package:inventory/Login/welcome.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -62,7 +63,7 @@ class LoginState extends State<Login> {
         onPressed: () {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
-            return Category();
+            return Welcome();
           }));
         },
         padding: EdgeInsets.all(12),

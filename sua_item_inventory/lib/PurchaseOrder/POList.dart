@@ -32,9 +32,11 @@ class POListState extends State<POList> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          appBarTitleText,
-          textAlign: TextAlign.left,
+        title: Center(
+          child: Text(
+            appBarTitleText,
+            textAlign: TextAlign.left,
+          ),
         ),
       ),
       body: Container(
