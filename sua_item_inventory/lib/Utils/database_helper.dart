@@ -106,6 +106,10 @@ class DatabaseHelper {
     var db = await this.database;
     int result =
         await db.rawDelete('DELETE FROM $categoryTableName WHERE $catID = $id');
+    if (result != 0) {
+      result =
+      await db.rawDelete('DELETE FROM $productTable WHERE $catID = $id');
+    }
     return result;
   }
 
