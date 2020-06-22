@@ -27,6 +27,7 @@ class DatabaseHelper {
   String POID = 'PO_id';
   String POName = 'PO_name';
   String POamount = 'PO_amount';
+  String poDate = 'PO_Date';
 
   DatabaseHelper._createInstance(); // Named constructor to create instance of DatabaseHelper
 
@@ -68,7 +69,7 @@ class DatabaseHelper {
 
     await db.execute(
         'CREATE TABLE $poTable($POID INTEGER PRIMARY KEY AUTOINCREMENT,$POName TEXT, '
-            '$POamount TEXT,$createdBy TEXT, $updatedBy TEXT,$createDate TEXT,'
+            '$POamount TEXT,$poDate TEXT, $createdBy TEXT, $updatedBy TEXT,$createDate TEXT,'
             '$updateDate TEXT)');
   }
 
@@ -184,6 +185,7 @@ class DatabaseHelper {
   // Insert Operation: Insert a po_type object to database
   Future<int> insertPO(POType poType) async {
     Database db = await this.database;
+    print('InsertPO'+poType.PO_date) ;
     var result = await db.insert(poTable, poType.toMap());
     return result;
   }
@@ -300,7 +302,10 @@ class DatabaseHelper {
     // For loop to create a 'product List' from a 'Map List'
     for (int i = 0; i < count; i++) {
       poList.add(POType.fromMapObject(poMapList[i]));
+      print ('getComplatePOList'+poList[i].PO_date.toString()) ;
+
     }
+
     return poList;
   }
 

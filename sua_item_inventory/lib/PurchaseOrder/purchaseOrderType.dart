@@ -4,6 +4,7 @@ class POType
   int _PO_id;
   String _PO_name;
   String _PO_amount;
+  String _PO_date;
   String _created_by;
   String _updated_by;
   String _create_date;
@@ -13,6 +14,7 @@ class POType
   POType(
       this._PO_name,
       this._PO_amount,
+      this._PO_date,
       this._created_by,
       this._updated_by,
       this._create_date,
@@ -60,6 +62,12 @@ class POType
     this._PO_name = value;
   }
 
+  String get PO_date => _PO_date;
+
+  set PO_date(String value){
+    this._PO_date = value;
+  }
+
 
   // Convert a Note object into a Map object
   Map<String, dynamic> toMap() {
@@ -70,6 +78,7 @@ class POType
     }
     map['PO_name'] = _PO_name;
     map['PO_amount'] = _PO_amount;
+    map['PO_Date'] = _PO_date;
     map['created_by'] = _created_by;
     map['updated_by'] = _updated_by;
     map['createDate'] = _create_date;
@@ -81,6 +90,7 @@ class POType
     this._PO_id = map['PO_id'];
     this._PO_name = map['PO_name'];
     this._PO_amount = map['PO_amount'];
+    this._PO_date = map['PO_Date'];
     this._created_by = map['created_by'];
     this._updated_by = map['updated_by'];
     this._create_date = map['createDate'];

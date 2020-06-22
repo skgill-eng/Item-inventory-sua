@@ -88,7 +88,7 @@ class POListState extends State<POList> {
                             Container(
                               //margin: EdgeInsets.only(left: 10.0),
                               child: Text(
-                                'PurA:₹' +
+                                '₹' +
                                     this.poList[position].PO_amount,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -99,8 +99,8 @@ class POListState extends State<POList> {
                             Container(
                               margin: EdgeInsets.only(left: 20.0),
                               child: Text(
-                                'PurDate:' +
-                                    this.poList[position].create_date,
+                                this.poList[position].PO_date == null?'':
+                                    this.poList[position].PO_date,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
@@ -154,7 +154,7 @@ class POListState extends State<POList> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           navigateToDetail(
-              POType('', '', '', '', '', '',),
+              POType('', '','', '', '', '', '',),
               'PO Details');
         },
         child: Icon(Icons.add),

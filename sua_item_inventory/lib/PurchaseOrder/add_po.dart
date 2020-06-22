@@ -17,13 +17,30 @@ class AddPO extends StatefulWidget {
 class AddPOState extends State<AddPO> {
 
   DatabaseHelper helper = DatabaseHelper();
-
   String appBarTitle;
   POType po;
 
   TextEditingController poNameController = TextEditingController();
   TextEditingController poAmountController = TextEditingController();
   TextEditingController poDateController = TextEditingController();
+
+
+
+  DateTime selectedDate = DateTime.now();
+
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        po.PO_date = DateFormat.yMMMd().format(selectedDate);
+        print("Dateeeeeeeeeeeeeeee"+po.PO_date);
+      });
+  }
 
 
   AddPOState(this.po, this.appBarTitle);
@@ -56,6 +73,8 @@ class AddPOState extends State<AddPO> {
       onChanged: (value){
         debugPrint('Something changed in Title Text Field');
         po.PO_amount = poAmountController.text;
+        po.PO_date=DateFormat.yMMMd().format(DateTime.now());
+
       },
       decoration: InputDecoration(
         labelText: "PO Amount",
@@ -71,7 +90,7 @@ class AddPOState extends State<AddPO> {
       //initialValue: 'udaisingh@gmail.com',
       onChanged: (value){
         debugPrint('Something changed in Title Text Field');
-        po.create_date = poDateController.text;
+        //po.create_date = poDateController.text;
       },
       decoration: InputDecoration(
         labelText: "PO Date",
@@ -88,7 +107,7 @@ class AddPOState extends State<AddPO> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          poNameController.text.isNotEmpty && poDateController.text.isNotEmpty?
+          poNameController.text.isNotEmpty && poAmountController.text.isNotEmpty?
           setState(() {
             _save();
           }):showAlertDialog(context);
@@ -99,9 +118,9 @@ class AddPOState extends State<AddPO> {
       ),
     );
 
+    String createDate = DateFormat.yMMMd().format(selectedDate);
     poNameController.text = po.PO_name;
     poAmountController.text = po.PO_amount;
-    poDateController.text = po.create_date;
 
     return Scaffold(
       appBar: AppBar(
@@ -114,19 +133,28 @@ class AddPOState extends State<AddPO> {
           padding: EdgeInsets.only(left: 24.0, right: 24.0),
           children: <Widget>[
 
-            SizedBox(height: 24.0),
+            SizedBox(height: 20.0),
             poName,
             SizedBox(height: 20.0),
             poAmount,
-            SizedBox(height: 20.0),
-            poDate,
-            SizedBox(height: 24.0),
+            SizedBox(height: 20.0,),
+            RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              padding: EdgeInsets.all(16),
+              color: Colors.blue,
+              child: Center(child: Text('Select date : '+"${selectedDate.toLocal()}".split(' ')[0])),
+              onPressed: () => _selectDate(context),
+            ),
+            SizedBox(height: 10.0),
             saveButton
           ],
         ),
       ),
     );
   }
+
 
   void _save() async {
 
@@ -141,6 +169,7 @@ class AddPOState extends State<AddPO> {
       print("Update category"+po.PO_id.toString());
     } else {// Case 2: Insert Operation
       result = await helper.insertPO(po);
+      print(po);
       print("Insert category"+po.PO_id.toString());
     }
 
