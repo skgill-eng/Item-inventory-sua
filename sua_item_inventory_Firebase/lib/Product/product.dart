@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:inventory/Category/add_category.dart';
 import 'package:inventory/Product/add_product.dart';
 import 'package:inventory/Types/product._type.dart';
 import 'package:inventory/Utils/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'
 
 class Product extends StatefulWidget {
   final categoryId;
