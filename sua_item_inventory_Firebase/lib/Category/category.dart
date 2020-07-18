@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:inventory/Category/add_category.dart';
 import 'package:inventory/Product/product.dart';
 import 'package:inventory/Product/search_products.dart';
-import 'package:inventory/PurchaseOrder/POList.dart';
 import 'package:inventory/Types/category_type.dart';
 import 'package:inventory/Utils/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' ;
 
 class Category extends StatefulWidget {
   @override

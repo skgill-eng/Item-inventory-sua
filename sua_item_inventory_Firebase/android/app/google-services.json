@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "40091043935",
-    "firebase_url": "https://inventory-management-d9672.firebaseio.com",
-    "project_id": "inventory-management-d9672",
-    "storage_bucket": "inventory-management-d9672.appspot.com"
+    "project_number": "1011143227922",
+    "firebase_url": "https://inventory-management-2e19c.firebaseio.com",
+    "project_id": "inventory-management-2e19c",
+    "storage_bucket": "inventory-management-2e19c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:40091043935:android:e97a33562c1b46ae8673ea",
+        "mobilesdk_app_id": "1:1011143227922:android:9f501cfbf1341101fa36cb",
         "android_client_info": {
           "package_name": "com.sua.inventory"
         }
       },
       "oauth_client": [
         {
-          "client_id": "40091043935-na4f7h1i3ke7vcirskv11595ud0dqta0.apps.googleusercontent.com",
+          "client_id": "1011143227922-bva6i0vttba0ohj5bjb85mj0kgj2c11e.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDNz-PUcElw558F3zp75XhCaGVKEwB1hSo"
+          "current_key": "AIzaSyCxYiYY_SDsZEKK6prty_tt60LvRuCA4aE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "40091043935-na4f7h1i3ke7vcirskv11595ud0dqta0.apps.googleusercontent.com",
+              "client_id": "1011143227922-bva6i0vttba0ohj5bjb85mj0kgj2c11e.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
