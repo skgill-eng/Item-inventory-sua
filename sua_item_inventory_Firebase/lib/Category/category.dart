@@ -4,8 +4,6 @@ import 'package:inventory/Category/add_category.dart';
 import 'package:inventory/Product/product.dart';
 import 'package:inventory/Product/search_products.dart';
 import 'package:inventory/Types/category_type.dart';
-import 'package:inventory/Utils/database_helper.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' ;
 
 class Category extends StatefulWidget {
@@ -19,7 +17,7 @@ class CategoryState extends State<Category> {
 
   TextEditingController searchController = TextEditingController();
 
-  DatabaseHelper databaseHelper = DatabaseHelper();
+  //DatabaseHelper databaseHelper = DatabaseHelper();
   List<CategoryType> categoryList;
   int count = 0;
   int categoryId;
@@ -83,7 +81,7 @@ class CategoryState extends State<Category> {
                         //onSearchTextChanged,
                       ),
                       onChanged: (String searchText) async {
-                        updateSearchListView(searchText);
+                       // updateSearchListView(searchText);
                       }),
                 ),
             Expanded(
@@ -113,12 +111,12 @@ class CategoryState extends State<Category> {
                                   color: Colors.blue,
                                 ),
                                 onTap: () {
-                                  String updateAppBarTitleText;
-                                  updateAppBarTitleText ='Update '+this.categoryList[position].category_name+' Category';
-                                  navigateToDetail(
-
-
-                                      this.categoryList[position],updateAppBarTitleText);
+//                                  String updateAppBarTitleText;
+//                                  updateAppBarTitleText ='Update '+this.categoryList[position].category_name+' Category';
+//                                  navigateToDetail(
+//
+//
+//                                      this.categoryList[position],updateAppBarTitleText);
                                 },
                               ),
                             ),
@@ -130,7 +128,7 @@ class CategoryState extends State<Category> {
                                   color: Colors.red,
                                 ),
                                 onTap: () {
-                                  _delete(context, categoryList[position]);
+                                  //_delete(context, categoryList[position]);
                                 },
                               ),
                             ),
@@ -158,59 +156,53 @@ class CategoryState extends State<Category> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          navigateToDetail(
-              CategoryType('', 'Udai', 'Udai', '', ''), 'Category Details');
+//          navigateToDetail(
+//              CategoryType('', 'Udai', 'Udai', '', ''), 'Category Details');
         },
         child: Icon(Icons.add),
       ),
     );
   }
 
-  void navigateToDetail(CategoryType category, String title) async {
-    bool result =
-        await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return AddCategory(category, title);
-    }));
-
-    if (result == true) {
-      updateListView();
-    }
-  }
-
-  void _delete(BuildContext context, CategoryType category) async {
-    int result = await databaseHelper.deleteCategory(category.category_id);
-    if (result != 0) {
-      //_showSnackBar(context, 'Todo Deleted Successfully');
-      updateListView();
-    }
-  }
+//  void navigateToDetail(CategoryType category, String title) async {
+//    bool result =
+//        await Navigator.push(context, MaterialPageRoute(builder: (context) {
+//      return AddCategory(category, title);
+//    }));
+//
+//    if (result == true) {
+//      updateListView();
+//    }
+//  }
+//
+//  void _delete(BuildContext context, CategoryType category) async {
+//    int result = await databaseHelper.deleteCategory(category.category_id);
+//    if (result != 0) {
+//      //_showSnackBar(context, 'Todo Deleted Successfully');
+//      updateListView();
+//    }
+//  }
 
 
   void updateListView() {
-    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
-    dbFuture.then((database) {
-      Future<List<CategoryType>> categoryListFuture =
-          databaseHelper.getCategoryList();
-      categoryListFuture.then((categoryList) {
-        setState(() {
-          this.categoryList = categoryList;
-          this.count = categoryList.length;
-        });
-      });
+    final databaseReference = Firestore.instance;
+    databaseReference.collection("Category").getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) => print('${f.data}}'));
     });
   }
 
-  void updateSearchListView(String searchText) {
-    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
-    dbFuture.then((database) {
-      Future<List<CategoryType>> categoryListFuture =
-      databaseHelper.searchCategoryList(searchText);
-      categoryListFuture.then((categoryList) {
-        setState(() {
-          this.categoryList = categoryList;
-          this.count = categoryList.length;
-        });
-      });
-    });
-  }
+//  void updateSearchListView(String searchText) {
+//    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
+//    dbFuture.then((database) {
+//      Future<List<CategoryType>> categoryListFuture =
+//      databaseHelper.searchCategoryList(searchText);
+//      categoryListFuture.then((categoryList) {
+//        setState(() {
+//          this.categoryList = categoryList;
+//          this.count = categoryList.length;
+//        });
+//      });
+//    });
+//  }
 }
