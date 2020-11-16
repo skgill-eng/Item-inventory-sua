@@ -4,7 +4,7 @@ import 'package:inventory/Category/add_category.dart';
 import 'package:inventory/Product/product.dart';
 import 'package:inventory/Product/search_products.dart';
 import 'package:inventory/Types/category_type.dart';
-import 'package:cloud_firestore/cloud_firestore.dart' ;
+import 'package:firebase_database/firebase_database.dart';
 
 class Category extends StatefulWidget {
   @override
@@ -185,10 +185,9 @@ class CategoryState extends State<Category> {
 
 
   void updateListView() {
-    final databaseReference = Firestore.instance;
-    databaseReference.collection("Category").getDocuments()
-        .then((QuerySnapshot snapshot) {
-      snapshot.documents.forEach((f) => print('${f.data}}'));
+    final databaseReference = FirebaseDatabase.instance.reference();
+    databaseReference.once().then((DataSnapshot snapshot) {
+      print('Data : ${snapshot.value}');
     });
   }
 
