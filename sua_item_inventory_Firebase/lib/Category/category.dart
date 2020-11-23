@@ -17,18 +17,15 @@ class CategoryState extends State<Category> {
 
   TextEditingController searchController = TextEditingController();
 
-  //DatabaseHelper databaseHelper = DatabaseHelper();
-  List<CategoryType> categoryList;
+  List categoryList=[];
   int count = 0;
   int categoryId;
   String categoryName;
-
+  void initState() {
+    updateListView();
+  }
   @override
   Widget build(BuildContext context) {
-    if (categoryList == null) {
-      categoryList = List<CategoryType>();
-      updateListView();
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -84,9 +81,9 @@ class CategoryState extends State<Category> {
                        // updateSearchListView(searchText);
                       }),
                 ),
-            Expanded(
+            isLoading?Center(child: CircularProgressIndicator(),):Expanded(
               child: ListView.builder(
-                  itemCount: count,
+                  itemCount: categoryList.length,
                   itemBuilder: (BuildContext context, int position) {
                     return Card(
                       color: Colors.white,
@@ -97,7 +94,7 @@ class CategoryState extends State<Category> {
 //                child: Text(getFirstLetter(this.todoList[position].title),
 //                    style: TextStyle(fontWeight: FontWeight.bold)),
 //              ),
-                        title: Text(this.categoryList[position].category_name,
+                        title: Text(categoryList[position],
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         //subtitle: Text(this.todoList[position].date),
                         trailing: Row(
@@ -111,12 +108,12 @@ class CategoryState extends State<Category> {
                                   color: Colors.blue,
                                 ),
                                 onTap: () {
-//                                  String updateAppBarTitleText;
-//                                  updateAppBarTitleText ='Update '+this.categoryList[position].category_name+' Category';
-//                                  navigateToDetail(
-//
-//
-//                                      this.categoryList[position],updateAppBarTitleText);
+                                  String updateAppBarTitleText;
+                                  updateAppBarTitleText ='Update '+categoryList[position]+' Category';
+                                  navigateToDetail(
+
+
+                                      categoryList[position],updateAppBarTitleText);
                                 },
                               ),
                             ),
@@ -128,7 +125,7 @@ class CategoryState extends State<Category> {
                                   color: Colors.red,
                                 ),
                                 onTap: () {
-                                  //_delete(context, categoryList[position]);
+                                 // _delete(context, categoryList[position]);
                                 },
                               ),
                             ),
@@ -136,8 +133,8 @@ class CategoryState extends State<Category> {
                         ),
                         onTap: () {
                           setState(() {
-                            categoryId = this.categoryList[position].category_id;
-                            categoryName=this.categoryList[position].category_name;
+                            //categoryId = this.categoryList[position].category_id;
+                            categoryName=categoryList[position];
                           });
                           debugPrint("ListTile Tapped");
                           Navigator.push(context,
@@ -156,52 +153,42 @@ class CategoryState extends State<Category> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-//          navigateToDetail(
-//              CategoryType('', 'Udai', 'Udai', '', ''), 'Category Details');
+          navigateToDetail(
+              CategoryType('', 'Udai', 'Udai', '', ''), 'Category Details');
         },
         child: Icon(Icons.add),
       ),
     );
   }
 
-//  void navigateToDetail(CategoryType category, String title) async {
-//    bool result =
-//        await Navigator.push(context, MaterialPageRoute(builder: (context) {
-//      return AddCategory(category, title);
-//    }));
-//
-//    if (result == true) {
-//      updateListView();
-//    }
-//  }
-//
-//  void _delete(BuildContext context, CategoryType category) async {
-//    int result = await databaseHelper.deleteCategory(category.category_id);
-//    if (result != 0) {
-//      //_showSnackBar(context, 'Todo Deleted Successfully');
-//      updateListView();
-//    }
-//  }
+  void navigateToDetail(CategoryType category, String title) async {
+    bool result =
+        await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return AddCategory(category, title);
+    }));
+
+    if (result == true) {
+      updateListView();
+    }
+  }
+
+ }
 
 
+ var isLoading = true;
   void updateListView() {
-    final databaseReference = FirebaseDatabase.instance.reference();
+    final databaseReference = FirebaseDatabase.instance.reference().child("productCatalogue").child("categories");
     databaseReference.once().then((DataSnapshot snapshot) {
-      print('Data : ${snapshot.value}');
+
+      var values=snapshot.value;
+      List categoryList =[];
+      print('Data : '+values.toString());
+      for (int i = 0;i<values.length;i++){
+        isLoading = true;
+        categoryList.add(values[i]["categoryName"]);
+        isLoading = false;
+      }
+      print("Category Name"+categoryList.toString());
     });
   }
 
-//  void updateSearchListView(String searchText) {
-//    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
-//    dbFuture.then((database) {
-//      Future<List<CategoryType>> categoryListFuture =
-//      databaseHelper.searchCategoryList(searchText);
-//      categoryListFuture.then((categoryList) {
-//        setState(() {
-//          this.categoryList = categoryList;
-//          this.count = categoryList.length;
-//        });
-//      });
-//    });
-//  }
-}
