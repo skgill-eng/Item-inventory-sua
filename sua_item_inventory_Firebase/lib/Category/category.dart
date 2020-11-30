@@ -24,6 +24,32 @@ class CategoryState extends State<Category> {
   void initState() {
     updateListView();
   }
+  void updateListView() {
+    final databaseReference = FirebaseDatabase.instance.reference().child("productCatalogue").child("categories");
+    databaseReference.once().then((DataSnapshot snapshot) {
+
+      var values=snapshot.value;
+      categoryList =[];
+      print('Data : '+values.toString());
+      setState(() {
+        isLoading = true;
+        print("Is Loading"+isLoading.toString());
+        for (int i = 0;i<values.length;i++){
+          categoryList.add(values[i]["categoryName"]);
+        }
+        isLoading = false;
+        print("Is Loading again"+isLoading.toString());
+      });
+
+      print("Category Name"+categoryList.toString());
+    });
+
+    void tt()
+    {
+      print("Category Name"+categoryList.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -176,19 +202,6 @@ class CategoryState extends State<Category> {
 
 
  var isLoading = true;
-  void updateListView() {
-    final databaseReference = FirebaseDatabase.instance.reference().child("productCatalogue").child("categories");
-    databaseReference.once().then((DataSnapshot snapshot) {
+var categoryList;
 
-      var values=snapshot.value;
-      List categoryList =[];
-      print('Data : '+values.toString());
-      for (int i = 0;i<values.length;i++){
-        isLoading = true;
-        categoryList.add(values[i]["categoryName"]);
-        isLoading = false;
-      }
-      print("Category Name"+categoryList.toString());
-    });
-  }
 
